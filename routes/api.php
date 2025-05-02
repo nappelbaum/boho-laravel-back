@@ -31,6 +31,9 @@ Route::group(['namespace' => 'User', 'prefix' => 'users'], function () {
 
 Route::get('/categories', [App\Http\Controllers\CategoryResourceController::class, 'index']);
 Route::get('/category', [App\Http\Controllers\CategoryResourceController::class, 'index_single']);
+Route::get('/categories_simple', [App\Http\Controllers\CategoryResourceController::class, 'index_simple']);
 
 Route::get('/products', [App\Http\Controllers\ProductResourceController::class, 'index']);
 Route::get('/product', [App\Http\Controllers\ProductResourceController::class, 'index_single']);
+
+Route::get('/pages/main', [App\Http\Controllers\PageResourseController::class, 'main']);

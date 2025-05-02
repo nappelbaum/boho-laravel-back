@@ -20,7 +20,17 @@ Route::group(['name' => 'admin', 'prefix' => 'admin_panel'], function () {
         Route::resource('category', App\Http\Controllers\Admin\CategoryController::class);
         Route::resource('product', App\Http\Controllers\Admin\ProductController::class);
 
-        // Route::patch('product_lite', [App\Http\Controllers\Admin\ProductController::class, 'update_lite'])->name('productLite');
+        // Route::resource('page', App\Http\Controllers\Admin\PageController::class);
+
+        Route::group(['name' => 'page', 'prefix' => 'page'], function () {
+            Route::get('main', [App\Http\Controllers\Admin\PageController::class, 'main_edit'])->name('pageMainEdit');
+            Route::patch('main/update', [App\Http\Controllers\Admin\PageController::class, 'main_update'])->name('pageMainUpdate');
+
+            Route::get('about', [App\Http\Controllers\Admin\PageController::class, 'about_edit'])->name('pageAboutEdit');
+            Route::patch('about/update', [App\Http\Controllers\Admin\PageController::class, 'about_update'])->name('pageAboutUpdate');
+            
+        });
+
     });
 });
 

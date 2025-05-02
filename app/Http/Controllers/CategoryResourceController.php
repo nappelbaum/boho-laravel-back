@@ -33,10 +33,26 @@ class CategoryResourceController extends Controller
 
     public function index_single(Request $request)
     {
-        $id = intval($request->query('id', 1));
-        $category = Category::find($id);
-        $category->products;
+        $category = Category::where('slug', $request->query('slug'))->first();
+
+        $products = $category->products()->orderBy($category->order_by, $category->order_method)->get();
+
+        foreach ($products as $product) {
+            $product->images;
+            $product->sizes;
+        }
+
+        $category->products = $products;
         
         return $category;
+    }
+
+    public function index_simple()
+    {
+        $sort = Order::find(1);
+
+        $categories = Category::orderBy($sort->by, $sort->method)->get();
+
+        return $categories;
     }
 }
