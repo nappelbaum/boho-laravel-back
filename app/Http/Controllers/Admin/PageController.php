@@ -132,7 +132,7 @@ class PageController extends Controller
 
     public function about_edit()
     {
-        return '111111 about_edit';
+        return 'Здесь пока ничего нет';
     }
 
     public function about_update(Request $request)

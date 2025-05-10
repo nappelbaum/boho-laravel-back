@@ -10,17 +10,22 @@ use App\Models\Size;
 
 class ProductResourceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $favorite_products = array();
 
-        foreach ($products as $product) {
-            $product->categories;
-            $product->images;
-            $product->sizes;
+        if($request->query('favorites')) {
+            foreach (explode(",", $request->query('favorites')) as $fav_id) {
+    
+                $fav_product = Product::where('id', $fav_id)->first();
+                $fav_product->images;
+    
+                array_push($favorite_products, $fav_product);
+    
+            }
         }
 
-        return $products;
+        return $favorite_products;
     }
 
     public function index_single(Request $request)
