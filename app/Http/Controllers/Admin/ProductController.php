@@ -114,7 +114,7 @@ class ProductController extends Controller
                 $width = $image->width(); // узнаю ширину картинки
 
                 // разбираю путь до картинки, удаляю первый элемент (папку 'storage'), новый путь начинается с папки copies:
-                $explode_path = explode("\\", $path);
+                $explode_path = explode("/", $path);
                 unset($explode_path[0]);
                 $current_path = 'copies';
 
@@ -292,7 +292,7 @@ class ProductController extends Controller
 
                     
                     if($is_dir_del) {
-                        $explode_image_path = explode("\\", $image['main_path']);
+                        $explode_image_path = explode("/", $image['main_path']);
                         $explode_image_path[0] = 'copies';
 
                         $img_repeat = Image::where('main_path', $image['main_path'])->get();
@@ -311,7 +311,7 @@ class ProductController extends Controller
                     $forImagesTable = array("main_path"=>$path); //объявляю массив для последующей загрузки данных в таблицу images
     
                     // разбираю путь до картинки, удаляю первый элемент (папку 'storage'), новый путь начинается с папки copies:
-                    $explode_path = explode("\\", $path);
+                    $explode_path = explode("/", $path);
                     unset($explode_path[0]);
                     $current_path = 'copies';
 
@@ -454,7 +454,7 @@ class ProductController extends Controller
         // прохожу по массиву путей картинок из базы данных для проверки папок картинок на предмет удаления:
         foreach ($product->images as $image) {
 
-            $explode_image_path = explode("\\", $image['main_path']);
+            $explode_image_path = explode("/", $image['main_path']);
             $explode_image_path[0] = 'copies';
 
             $img_repeat = Image::where('main_path', $image['main_path'])->get();

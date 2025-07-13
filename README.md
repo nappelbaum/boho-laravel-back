@@ -85,4 +85,4 @@ Header add Access-Control-Allow-Headers: "x-requested-with, content-type, origin
 
 (https://www.youtube.com/watch?v=d-99IlvUuJw&t=407s&ab_channel=%D0%93%D0%BE%D1%88%D0%B0%D0%94%D1%83%D0%B4%D0%B0%D1%80%D1%8C)
 
-В контроллерах менять "\\" на "/"
+В контроллерах менять "explode("\\", ...)" на "explode("/", ...)"

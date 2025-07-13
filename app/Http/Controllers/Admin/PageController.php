@@ -32,7 +32,7 @@ class PageController extends Controller
 
         if($request->main_image_path) {
             // удаляю имеющуюся папку с файлами
-            $explode_image_path = explode("\\", $info->main_path);
+            $explode_image_path = explode("/", $info->main_path);
             $explode_image_path[0] = 'copies';
 
             $img_repeat = array();
@@ -60,7 +60,7 @@ class PageController extends Controller
             $width = $image->width(); // узнаю ширину картинки
 
             // разбираю путь до картинки, удаляю первый элемент (папку 'storage'), новый путь начинается с папки copies:
-            $explode_path = explode("\\", $request->main_image_path);
+            $explode_path = explode("/", $request->main_image_path);
             unset($explode_path[0]);
             $current_path = 'copies';
 
