@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Image;
+use App\Models\PageMain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Order;
@@ -295,8 +296,10 @@ class ProductController extends Controller
                         $explode_image_path[0] = 'copies';
 
                         $img_repeat = Image::where('main_path', $image['main_path'])->get();
+                        $img_repeat_main_page = array();
+                        $img_repeat_main_page = PageMain::where('main_path', $image['main_path'])->get();
 
-                        if(count($img_repeat) < 2) {
+                        if(count($img_repeat) < 2 && count($img_repeat_main_page) == 0 && count($explode_image_path) > 1) {
                             File::deleteDirectory(implode('/', $explode_image_path));
                         };
                     }
@@ -448,6 +451,24 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        // прохожу по массиву путей картинок из базы данных для проверки папок картинок на предмет удаления:
+        foreach ($product->images as $image) {
+
+            $explode_image_path = explode("\\", $image['main_path']);
+            $explode_image_path[0] = 'copies';
+
+            $img_repeat = Image::where('main_path', $image['main_path'])->get();
+            $img_repeat_main_page = array();
+            $img_repeat_main_page = PageMain::where('main_path', $image['main_path'])->get();
+
+            // если картинка единственная в БД, то удаляю папку с ней
+            if(count($img_repeat) < 2 && count($img_repeat_main_page) == 0 && count($explode_image_path) > 1) {
+                File::deleteDirectory(implode('/', $explode_image_path));
+            };
+            
+        }
+
+        // удаляю запись из БД:
         $product->delete();
 
         return redirect()->back()->withSuccess('Продукт был успешно удален');

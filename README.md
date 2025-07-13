@@ -64,3 +64,25 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Об отличиях проекта на локальном и удаленном серверах
+
+Файл .env,
+
+.htaccess в корне:
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+SetEnvIf Origin "^http(s)?://(.+\.)?(localhost:3000)$" origin_is=$0 
+Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+
+Header set Access-Control-Allow-Credentials: true
+Header set Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
+Header add Access-Control-Allow-Headers: "x-requested-with, content-type, origin, authorization, accept, client-security-token"
+
+(https://www.youtube.com/watch?v=d-99IlvUuJw&t=407s&ab_channel=%D0%93%D0%BE%D1%88%D0%B0%D0%94%D1%83%D0%B4%D0%B0%D1%80%D1%8C)
+
+В контроллерах менять "\\" на "/"

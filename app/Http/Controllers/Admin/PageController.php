@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\PageMain;
+use App\Models\Image;
 
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
@@ -33,7 +34,13 @@ class PageController extends Controller
             // удаляю имеющуюся папку с файлами
             $explode_image_path = explode("\\", $info->main_path);
             $explode_image_path[0] = 'copies';
-            File::deleteDirectory(implode('/', $explode_image_path));
+
+            $img_repeat = array();
+            $img_repeat = Image::where('main_path', $info->main_path)->get();
+
+            if(count($explode_image_path) > 1 && count($img_repeat) == 0) {
+                File::deleteDirectory(implode('/', $explode_image_path));
+            }
 
             // удаляю все данные о путях к картинке и копиям из таблицы бд
             $info->main_path = NULL;
@@ -81,7 +88,7 @@ class PageController extends Controller
             $image->save($current_path . '/' . $name . '.' . $ext, quality: 65);
             $info->copy_main = $current_path . '/' . $name . '.' . $ext; //записываю в таблицу бд копию загружаемой картинки
             
-            if($height > 800 && $width > 800) {
+            if($height > 400 && $width > 400) {
                 // проверяю и меняю размеры исходной картинки и делаю копии с разрешениями 2400,1600,1200,800px:
                 if($height > $width) {
                     if($width > 2400) {
@@ -99,9 +106,13 @@ class PageController extends Controller
                         $image->toWebp()->save($current_path . '/' . $name . '__1200px.' . 'webp');
                         $info->copy_1200 = $current_path . '/' . $name . '__1200px.' . 'webp';
                     }
-                    $image->scale(width: 800);
-                    $image->toWebp()->save($current_path . '/' . $name . '__800px.' . 'webp');
-                    $info->copy_800 = $current_path . '/' . $name . '__800px.' . 'webp';
+                    if($width > 800) {
+                        $image->scale(width: 800);
+                        $image->toWebp()->save($current_path . '/' . $name . '__800px.' . 'webp');
+                        $info->copy_800 = $current_path . '/' . $name . '__800px.' . 'webp';
+                    }
+                        $image->scale(width: 400);
+                        $image->toWebp()->save($current_path . '/' . $name . '__400px.' . 'webp');
                 } else {
                     if($height > 2400) {
                         $image->scale(height: 2400);
@@ -118,9 +129,13 @@ class PageController extends Controller
                         $image->toWebp()->save($current_path . '/' . $name . '__1200px.' . 'webp');
                         $info->copy_1200 = $current_path . '/' . $name . '__1200px.' . 'webp';
                     }
-                    $image->scale(height: 800);
-                    $image->toWebp()->save($current_path . '/' . $name . '__800px.' . 'webp');
-                    $info->copy_800 = $current_path . '/' . $name . '__800px.' . 'webp';
+                    if($height > 800) {
+                        $image->scale(height: 800);
+                        $image->toWebp()->save($current_path . '/' . $name . '__800px.' . 'webp');
+                        $info->copy_800 = $current_path . '/' . $name . '__800px.' . 'webp';
+                    }
+                        $image->scale(height: 400);
+                        $image->toWebp()->save($current_path . '/' . $name . '__400px.' . 'webp');
                 }    
             }
         }
